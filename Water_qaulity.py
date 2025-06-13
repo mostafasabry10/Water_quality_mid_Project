@@ -4,7 +4,7 @@ import pandas as pd
 import plotly.express as px
 
 # Load data
-df = pd.read_csv(r"C:/Users/mostafa/Mid_Project/cleaned_data.csv",index_col = 0)  
+df = pd.read_csv("cleaned_data.csv",index_col = 0)  
 
 # Sidebar for navigation
 page = st.sidebar.selectbox("Choose a page:", ["Data", "Plots", "Custom Plot"])
