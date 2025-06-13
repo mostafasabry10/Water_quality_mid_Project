@@ -12,7 +12,7 @@ page = st.sidebar.selectbox("Choose a page:", ["Data", "Plots", "Custom Plot"])
 # Page 1: Display Data
 if page == "Data":
     st.title("Water Pollution Dataset")
-    st.write("### Raw Data")
+    st.write("### Cleaned Data")
     st.dataframe(df)
 
 # Page 2: Plots
