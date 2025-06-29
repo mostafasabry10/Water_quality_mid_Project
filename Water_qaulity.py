@@ -58,19 +58,19 @@ elif page == "Custom Plot":
     st.title("Create Your Own Plot")
 
     st.write("Select columns and plot type to generate a custom visualization.")
-    x_col = st.selectbox("Select X-axis column:", df.columns)
-    y_col = st.selectbox("Select Y-axis column:", df.columns)
+    x_col = st.selectbox("Select X-axis column:", df2.columns)
+    y_col = st.selectbox("Select Y-axis column:", df2.columns)
     plot_type = st.selectbox("Select Plot Type:", ["Scatter", "Line", "Bar", "Box", "Violin"])
 
     if plot_type == "Scatter":
-        fig = px.scatter(df, x=x_col, y=y_col, title=f"Scatter Plot: {x_col} vs {y_col}")
+        fig = px.scatter(df2, x=x_col, y=y_col, title=f"Scatter Plot: {x_col} vs {y_col}")
     elif plot_type == "Line":
-        fig = px.line(df, x=x_col, y=y_col, title=f"Line Plot: {x_col} vs {y_col}")
+        fig = px.line(df2, x=x_col, y=y_col, title=f"Line Plot: {x_col} vs {y_col}")
     elif plot_type == "Bar":
-        fig = px.bar(df, x=x_col, y=y_col, title=f"Bar Plot: {x_col} vs {y_col}")
+        fig = px.bar(df2, x=x_col, y=y_col, title=f"Bar Plot: {x_col} vs {y_col}")
     elif plot_type == "Box":
-        fig = px.box(df, x=x_col, y=y_col, title=f"Box Plot: {x_col} vs {y_col}")
+        fig = px.box(df2, x=x_col, y=y_col, title=f"Box Plot: {x_col} vs {y_col}")
     elif plot_type == "Violin":
-        fig = px.violin(df, x=x_col, y=y_col, box=True, title=f"Violin Plot: {x_col} vs {y_col}")
+        fig = px.violin(df2, x=x_col, y=y_col, box=True, title=f"Violin Plot: {x_col} vs {y_col}")
 
     st.plotly_chart(fig)
