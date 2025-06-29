@@ -1,4 +1,5 @@
 
+
 import streamlit as st
 import pandas as pd
 import plotly.express as px
@@ -44,13 +45,15 @@ elif page == "Plots":
     st.plotly_chart(fig4)
 
     st.subheader("5. Net Migration by Country and Pollution Status")
-    migration_polliation_affect = df.groupby(['Country','pollution_status'])['netMigration_2011_2018'].value_counts().reset_index()
-    fig5 = px.bar(migration_polliation_affect, x='Country', y='netMigration_2011_2018', color='pollution_status', barmode='group', title='Average Net Migration by Country and Pollution Status', labels={'netMigration_2011_2018': 'Avg. Net Migration (2011–2018)','pollution_status': 'Pollution Status (0 = Unsafe, 1 = Safe)'})
+    migration_polliation_affect = (df.groupby(['Country','pollution_status'])['netMigration_2011_2018'].value_counts().reset_index()).sort_values(by='netMigration_2011_2018',ascending = False)
+    fig5 = px.bar(migration_polliation_affect,x='Country',y='netMigration_2011_2018',color='pollution_status',barmode='group',title='Average Net Migration by Country and Pollution Status',labels={'netMigration_2011_2018': 'Avg. Net Migration (2011–2018)','pollution_status': 'Pollution Status (0 = Unsafe, 1 = Safe, 2 = Unsafe)'})
     st.plotly_chart(fig5)
 
     st.subheader("6. Protected Area vs Pollution Status")
-    protected_area = df.groupby(['Country','pollution_status'])['TerraMarineProtected_2016_2018'].value_counts().reset_index().sort_values(by ='TerraMarineProtected_2016_2018' ,ascending = False).reset_index(drop = True)
-    fig6 = px.bar(protected_area, x='Country', y='count', color='pollution_status', barmode='group', title='Protected Area Occurrences by Country and Pollution Status', labels={'count': 'Frequency','pollution_status': 'Pollution Status (0 = Unsafe, 1 = Safe)','Country': 'Country'})
+    protected_area = df.groupby(['Country', 'pollution_status'])['TerraMarineProtected_2016_2018'].count().reset_index()
+    protected_area = protected_area.rename(columns={'TerraMarineProtected_2016_2018': 'count'})
+    protected_area = protected_area.sort_values(by='count', ascending=False)    
+    fig6 = px.bar(protected_area,x='Country',y='count',color='pollution_status',barmode='group',title='Protected Area Occurrences by Country and Pollution Status',labels={'count': 'Frequency','pollution_status': 'Pollution Status (0 = Unsafe, 1 = Safe, 2 = Unsafe)','Country': 'Country'})   
     st.plotly_chart(fig6)
 
 # Page 3: Custom Plot Builder
