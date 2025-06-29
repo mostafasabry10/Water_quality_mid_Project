@@ -1,11 +1,11 @@
 
-
 import streamlit as st
 import pandas as pd
 import plotly.express as px
 
 # Load data
-df = pd.read_csv("cleaned_data.csv",index_col = 0)  
+df = pd.read_csv("waterPollution.csv",index_col = 0)
+df2 = pd.read_csv('cleaned_data.csv',index_col = 0)
 
 # Sidebar for navigation
 page = st.sidebar.selectbox("Choose a page:", ["Data", "Plots", "Custom Plot"])
@@ -13,8 +13,10 @@ page = st.sidebar.selectbox("Choose a page:", ["Data", "Plots", "Custom Plot"])
 # Page 1: Display Data
 if page == "Data":
     st.title("Water Pollution Dataset")
-    st.write("### Cleaned Data")
+    st.write("### Raw Data")
     st.dataframe(df)
+    st.write("### Cleaned Data")
+    st.dataframe(df2)
 
 # Page 2: Plots
 elif page == "Plots":
@@ -38,23 +40,18 @@ elif page == "Plots":
     fig3 = px.bar(merged_df, x='Country', y='pollution_status', color='TouristMean_1990_2020', title='Safe Water Samples by Country (Colored by Tourism Level)', labels={'pollution_status': 'Safe Sample Count','TouristMean_1990_2020': 'Avg. Tourists (1990–2020)'}, color_continuous_scale='Blues')
     st.plotly_chart(fig3)
 
-    st.subheader("4. Yearly Water Pollution Rate")
-    pollution_rate_yearly = df[df['pollution_status'] == 0].groupby('phenomenonTimeReferenceYear')['pollution_status'].value_counts().reset_index().drop('pollution_status',axis = 1)
-    pollution_rate_yearly = pollution_rate_yearly.sort_values(by='count',ascending = False).reset_index(drop=True)
-    fig4 = px.line(pollution_rate_yearly, x='phenomenonTimeReferenceYear', y='count', title='Yearly Water Pollution Rate', labels={'phenomenonTimeReferenceYear': 'Year','count': 'Polluted Sample Count'})
+
+    st.subheader("4. Net Migration by Country and Pollution Status")
+    migration_polliation_affect = (df.groupby(['Country','pollution_status'])['netMigration_2011_2018'].value_counts().reset_index()).sort_values(by='netMigration_2011_2018',ascending = False)
+    fig4 = px.bar(migration_polliation_affect,x='Country',y='netMigration_2011_2018',color='pollution_status',barmode='group',title='Net Migration by Country and Pollution Status',labels={'netMigration_2011_2018': 'Avg. Net Migration (2011–2018)','pollution_status': 'Pollution Status (0 = Unsafe, 1 = Safe, 2 = Unsafe)'})
     st.plotly_chart(fig4)
 
-    st.subheader("5. Net Migration by Country and Pollution Status")
-    migration_polliation_affect = (df.groupby(['Country','pollution_status'])['netMigration_2011_2018'].value_counts().reset_index()).sort_values(by='netMigration_2011_2018',ascending = False)
-    fig5 = px.bar(migration_polliation_affect,x='Country',y='netMigration_2011_2018',color='pollution_status',barmode='group',title='Average Net Migration by Country and Pollution Status',labels={'netMigration_2011_2018': 'Avg. Net Migration (2011–2018)','pollution_status': 'Pollution Status (0 = Unsafe, 1 = Safe, 2 = Unsafe)'})
-    st.plotly_chart(fig5)
-
-    st.subheader("6. Protected Area vs Pollution Status")
+    st.subheader("5. Protected Area vs Pollution Status")
     protected_area = df.groupby(['Country', 'pollution_status'])['TerraMarineProtected_2016_2018'].count().reset_index()
     protected_area = protected_area.rename(columns={'TerraMarineProtected_2016_2018': 'count'})
     protected_area = protected_area.sort_values(by='count', ascending=False)    
-    fig6 = px.bar(protected_area,x='Country',y='count',color='pollution_status',barmode='group',title='Protected Area Occurrences by Country and Pollution Status',labels={'count': 'Frequency','pollution_status': 'Pollution Status (0 = Unsafe, 1 = Safe, 2 = Unsafe)','Country': 'Country'})   
-    st.plotly_chart(fig6)
+    fig5 = px.bar(protected_area,x='Country',y='count',color='pollution_status',barmode='group',title='Protected Area Occurrences by Country and Pollution Status',labels={'count': 'Frequency','pollution_status': 'Pollution Status (0 = Unsafe, 1 = Safe, 2 = Unsafe)','Country': 'Country'})   
+    st.plotly_chart(fig5)
 
 # Page 3: Custom Plot Builder
 elif page == "Custom Plot":
